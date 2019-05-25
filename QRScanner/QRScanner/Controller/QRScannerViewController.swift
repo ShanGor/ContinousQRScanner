@@ -21,6 +21,12 @@ class QRScannerViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var removeButton: UIButton! {
+        didSet {
+            removeButton.setTitle("Remove Files", for: .normal)
+        }
+    }
+    
     var qrData: QRData? = nil {
         didSet {
             if qrData != nil {
@@ -54,6 +60,12 @@ class QRScannerViewController: UIViewController {
         let buttonTitle = scannerView.isRunning ? "STOP" : "SCAN"
         sender.setTitle(buttonTitle, for: .normal)
     }
+    
+    @IBAction func removeButtonAction(_ sender: UIButton) {
+        sender.setTitle("Removing..", for: .disabled)
+        FileUtils.clearFiles()
+        sender.setTitle("Remove Files", for: .normal)
+    }
 }
 
 
@@ -69,6 +81,15 @@ extension QRScannerViewController: QRScannerViewDelegate {
     
     func qrScanningSucceededWithCode(_ str: String?) {
         self.qrData = QRData(codeString: str)
+        
+        let firstColon = str?.firstIndex(of: ":")
+        if (firstColon != nil) {
+            let colonIndex = firstColon!
+            let numStr = str![str!.startIndex..<colonIndex]
+            let text = str![str!.index(after: colonIndex)..<str!.endIndex]
+            
+            FileUtils.saveStringToFile(name: "t_\(numStr).txt", text: String(text))
+        }
     }
     
     
