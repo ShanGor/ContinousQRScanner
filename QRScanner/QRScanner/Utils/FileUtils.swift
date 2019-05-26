@@ -11,7 +11,7 @@ import Foundation
 class FileUtils {
     public static func saveStringToFile(name: String, text: String) {
         let manager = FileManager.default
-        let dir = getDocumentPath()
+        let dir = getDocumentPath(withSchema: true)
         let baseDir = dir.appendingPathComponent("qrcode")
         if (manager.fileExists(atPath: baseDir.absoluteString)) {
             print("Directory exists")
@@ -25,7 +25,7 @@ class FileUtils {
 
     public static func clearFiles() {
         let manager = FileManager.default
-        let dir = getDocumentPath()
+        let dir = getDocumentPath(withSchema: false)
         let baseDir = dir.appendingPathComponent("qrcode")
         if (manager.fileExists(atPath: baseDir.absoluteString)) {
             let filePaths = try! manager.contentsOfDirectory(at: baseDir, includingPropertiesForKeys: nil)
@@ -39,8 +39,12 @@ class FileUtils {
      * The NSSearchPathForDirectoriesInDomains can get the fixed path name every time.
      * While fileManager.urls(for: .documentDirectory, in: .userDomainMask) return different.
      */
-    public static func getDocumentPath() -> URL {
+    public static func getDocumentPath(withSchema: Bool = false) -> URL {
         let dirStr = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        return URL.init(fileURLWithPath: dirStr)
+        if (withSchema) {
+            return URL.init(fileURLWithPath: dirStr)
+        } else {
+            return URL(string: dirStr)!
+        }
     }
 }

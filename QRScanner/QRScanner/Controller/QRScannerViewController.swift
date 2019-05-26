@@ -88,7 +88,7 @@ extension QRScannerViewController: QRScannerViewDelegate {
             let numStr = str![str!.startIndex..<colonIndex]
             let text = str![str!.index(after: colonIndex)..<str!.endIndex]
             
-            FileUtils.saveStringToFile(name: "t_\(numStr).txt", text: String(text))
+            FileUtils.saveStringToFile(name: "\(numStr).txt", text: String(text))
         }
     }
     

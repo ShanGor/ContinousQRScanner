@@ -19,7 +19,8 @@ class DetailViewController: UIViewController {
         detailLabel.text = qrData?.codeString
         UIPasteboard.general.string = detailLabel.text
         showToast(message : "Text copied to clipboard")
-
+        // Go back to last page
+//        self.dismiss(animated: true, completion: nil)
     }
 
     @IBAction func openInWebAction(_ sender: Any) {
